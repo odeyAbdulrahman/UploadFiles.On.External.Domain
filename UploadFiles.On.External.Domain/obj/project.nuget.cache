@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "cIC3V7+ytqGzkENM8/wyjjTlCN3Nz2yzKjGSwVlWtxXoKQB0O0KRhhUz0gyqpr7zL9ubxsBbbqMSOCkOGSjXqA==",
+  "success": true,
+  "projectFilePath": "D:\\GetHub\\UploadFiles.On.External.Domain\\UploadFiles.On.External.Domain\\UploadFiles.On.External.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\lenov0\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\lenov0\\.nuget\\packages\\microsoft.extensions.configuration.binder\\5.0.0\\microsoft.extensions.configuration.binder.5.0.0.nupkg.sha512",
+    "C:\\Users\\lenov0\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

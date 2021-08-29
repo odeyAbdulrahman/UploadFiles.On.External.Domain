@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>UploadFiles.On.External.Domain</id>
+    <version>1.0.2</version>
+    <authors>odey abdalrahman</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The library enables you to upload files in an external domain
+Base on .Net 5</description>
+    <dependencies>
+      <group targetFramework="net5.0">
+        <dependency id="Microsoft.Extensions.Configuration.Abstractions" version="5.0.0" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Extensions.Configuration.Binder" version="5.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\GetHub\UploadFiles.On.External.Domain\UploadFiles.On.External.Domain\bin\Release\net5.0\UploadFiles.On.External.Domain.dll" target="lib\net5.0\UploadFiles.On.External.Domain.dll" />
+  </files>
+</package>
