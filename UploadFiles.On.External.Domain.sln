@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UploadFiles.On.External.Domain", "UploadFiles.On.External.Domain\UploadFiles.On.External.Domain.csproj", "{ACDC058D-7ACC-481F-BD03-E29AD593C8A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UploadFiles.On.External.Domain", "UploadFiles.On.External.Domain\UploadFiles.On.External.Domain.csproj", "{ACDC058D-7ACC-481F-BD03-E29AD593C8A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{2ACC2896-DAD4-4F6A-B9B7-5C32D657B0A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{ACDC058D-7ACC-481F-BD03-E29AD593C8A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACDC058D-7ACC-481F-BD03-E29AD593C8A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACDC058D-7ACC-481F-BD03-E29AD593C8A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2ACC2896-DAD4-4F6A-B9B7-5C32D657B0A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2ACC2896-DAD4-4F6A-B9B7-5C32D657B0A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2ACC2896-DAD4-4F6A-B9B7-5C32D657B0A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2ACC2896-DAD4-4F6A-B9B7-5C32D657B0A8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

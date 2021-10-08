@@ -1,6 +1,10 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/bin
-/obj
-/out-tsc
+/UploadFiles.On.External.Domain/bin
+/UploadFiles.On.External.Domain/obj
+/UploadFiles.On.External.Domain/out-tsc
+
+/test/bin
+/test/obj
+/test/out-tsc

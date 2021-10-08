@@ -112,7 +112,7 @@
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
-    "version": "1.0.2",
+    "version": "1.0.7",
     "restore": {
       "projectUniqueName": "D:\\GetHub\\UploadFiles.On.External.Domain\\UploadFiles.On.External.Domain\\UploadFiles.On.External.Domain.csproj",
       "projectName": "UploadFiles.On.External.Domain",
