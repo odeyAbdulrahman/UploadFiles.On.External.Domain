@@ -33,6 +33,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
                 return SaveDoc(Base64, Folder);
             if (Type == FilesType.PDF)
                 return SavePDF(Base64, Folder);
+            if (Type == FilesType.Audio)
+                return SaveAudio(Base64, Folder);
             return ("", FeedBack.IsNotFile);
         }
         /// <summary>
@@ -53,6 +55,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
                 return SaveDoc2(Base64, Folder);
             if (Type == FilesType.PDF)
                 return SavePDF2(Base64, Folder);
+            if (Type == FilesType.Audio)
+                return SaveAudio2(Base64, Folder);
             return ("", FeedBack.IsNotFile);
         }
         /// <summary>
@@ -97,6 +101,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
         #endregion
 
         #region Helper funcation
+        
+        #region Helper funcation [Save Image]
         /// <summary>
         /// This func for save image file
         /// Returns from this function are the name of image with full path
@@ -136,6 +142,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
                 return (Save2(ref Length, ref Folder, ref Settings, FileExt.jpeg), FeedBack.ImageUploaded);
             return ("", FeedBack.IsNotImage);
         }
+        #endregion
+        #region Helper funcation [Save Pdf]
         /// <summary>
         /// This func for save pdf file
         /// Returns from this function are the name of pdf with full path
@@ -174,6 +182,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
                 return (Save2(ref Length, ref Folder, ref Settings, FileExt.pdf), FeedBack.PdfUploaded);
             return ("", FeedBack.IsNotPdf);
         }
+        #endregion
+        #region Helper funcation [Save Doc]
         /// <summary>
         /// This func for save pdf file
         /// Returns from this function are the name of documant with full path
@@ -188,8 +198,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
             byte[] Length = Convert.FromBase64String(FixBase64);
             if (Length.Length > (ImageFileLength * Settings.MaximumSize))
                 return ("", FeedBack.largeSize);
-            DocFormat ExcelFormat = GetDocFormat(Length);
-            if (ExcelFormat == DocFormat.Doc)
+            DocFormat DocFormat = GetDocFormat(Length);
+            if (DocFormat == DocFormat.Doc)
                 return (Save(ref Length, ref Folder, ref Settings, FileExt.docx), FeedBack.DocUploaded);
             return ("", FeedBack.IsNotDoc);
         }
@@ -207,13 +217,58 @@ namespace UploadFiles.On.External.Domain.Code.Base
             byte[] Length = Convert.FromBase64String(FixBase64);
             if (Length.Length > (ImageFileLength * Settings.MaximumSize))
                 return ("", FeedBack.largeSize);
-            DocFormat ExcelFormat = GetDocFormat(Length);
-            if (ExcelFormat == DocFormat.Doc)
+            DocFormat DocFormat = GetDocFormat(Length);
+            if (DocFormat == DocFormat.Doc)
                 return (Save2(ref Length, ref Folder, ref Settings, FileExt.docx), FeedBack.DocUploaded);
             return ("", FeedBack.IsNotDoc);
         }
+        #endregion
+        #region Helper funcation [Save Audio]
         /// <summary>
-        /// htis is base funcation for save file
+        /// This func for save Voice file
+        /// Returns from this function are the name of voice with full path
+        /// </summary>
+        /// <param name="Base64"></param>
+        /// <param name="Folder"></param>
+        /// <returns></returns>
+        private (string, FeedBack) SaveAudio(string Base64, string Folder)
+        {
+            UploadFileSettings Settings = SubDomainSettings();
+            string FixBase64 = Regex.Replace(Base64, @"^data:.+;base64,", string.Empty);
+            byte[] Length = Convert.FromBase64String(FixBase64);
+            if (Length.Length > (ImageFileLength * Settings.MaximumSize))
+                return ("", FeedBack.largeSize);
+            AudioFormat AudioFormat = GetAudioFormat(Length);
+            if (AudioFormat == AudioFormat.mp3 || AudioFormat == AudioFormat.mp4 || AudioFormat == AudioFormat.wav || AudioFormat == AudioFormat.wmv)
+                return (Save(ref Length, ref Folder, ref Settings, FileExt.wav), FeedBack.DocUploaded);
+            return ("", FeedBack.IsNotDoc);
+        }
+        /// <summary>
+        /// This func for save Voice file
+        /// Returns from this function are the name of Voice only
+        /// </summary>
+        /// <param name="Base64"></param>
+        /// <param name="Folder"></param>
+        /// <returns></returns>
+        private (string, FeedBack) SaveAudio2(string Base64, string Folder)
+        {
+            UploadFileSettings Settings = SubDomainSettings();
+            string FixBase64 = Regex.Replace(Base64, @"^data:.+;base64,", string.Empty);
+            byte[] Length = Convert.FromBase64String(FixBase64);
+            if (Length.Length > (ImageFileLength * Settings.MaximumSize))
+                return ("", FeedBack.largeSize);
+            AudioFormat AudioFormat = GetAudioFormat(Length);
+            if (AudioFormat == AudioFormat.mp3 || AudioFormat == AudioFormat.mp4 || AudioFormat == AudioFormat.wav || AudioFormat == AudioFormat.wmv)
+                return (Save2(ref Length, ref Folder, ref Settings, FileExt.wav), FeedBack.DocUploaded);
+            return ("", FeedBack.IsNotDoc);
+        }
+        #endregion
+
+        #endregion
+
+        #region Save file func
+        /// <summary>
+        /// this is base funcation for save file
         /// </summary>
         /// <param name="length"></param>
         /// <param name="folder"></param>
@@ -229,7 +284,7 @@ namespace UploadFiles.On.External.Domain.Code.Base
             return FullUrl;
         }
         /// <summary>
-        /// htis is base funcation for save file
+        /// this is base funcation for save file
         /// </summary>
         /// <param name="length"></param>
         /// <param name="folder"></param>
@@ -284,7 +339,6 @@ namespace UploadFiles.On.External.Domain.Code.Base
         /// <returns></returns>
         private static PdfFormat GetPdfFormat(byte[] bytes)
         {
-
             var Pdf = new byte[] { 37, 80, 68, 70, 45, 49, 46 };
             if (Pdf.SequenceEqual(bytes.Take(Pdf.Length)))
                 return PdfFormat.Pdf;
@@ -302,6 +356,29 @@ namespace UploadFiles.On.External.Domain.Code.Base
             if (DOC.SequenceEqual(bytes.Take(DOC.Length)) || DOCX.SequenceEqual(bytes.Take(DOCX.Length)))
                 return DocFormat.Doc;
             return DocFormat.unknown;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        private static AudioFormat GetAudioFormat(byte[] bytes)
+        {
+            var MP3 = new byte[] { 73, 68, 51, 3 };
+            var MP4 = new byte[] { 0, 0, 0, 32, 102, 116, 121, 112 };
+            var WAV = new byte[] { 82, 73, 70, 70 };
+            var WMV = new byte[] { 48, 38, 178, 117, 142, 102, 207, 17, 166, 217, 0, 170, 0, 98, 206, 108 };
+
+            if ( MP3.SequenceEqual(bytes.Take(MP3.Length)))
+                return AudioFormat.mp3;
+            if (MP4.SequenceEqual(bytes.Take(MP4.Length)))
+                return AudioFormat.mp4;
+            if (WAV.SequenceEqual(bytes.Take(WAV.Length)))
+                return AudioFormat.wav;
+            if (WMV.SequenceEqual(bytes.Take(WMV.Length)))
+                return AudioFormat.wmv;
+            return AudioFormat.unknown;
         }
         #endregion
     }

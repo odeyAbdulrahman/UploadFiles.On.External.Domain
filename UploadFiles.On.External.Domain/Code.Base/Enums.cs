@@ -9,7 +9,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
     {
         Image = 1,
         PDF = 2,
-        Doc = 3
+        Doc = 3,
+        Audio = 4
     }
     public enum FeedBack : int
     {
@@ -35,7 +36,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
     {
         jpeg,
         pdf,
-        docx
+        docx,
+        wav
     }
     public enum ImageFormat
     {
@@ -55,6 +57,14 @@ namespace UploadFiles.On.External.Domain.Code.Base
     {
         Doc,
         Docx,
+        unknown
+    }
+    public enum AudioFormat
+    {
+        wmv,
+        wav,
+        mp3,
+        mp4,
         unknown
     }
 }
