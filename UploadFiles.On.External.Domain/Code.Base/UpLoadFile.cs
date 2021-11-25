@@ -27,15 +27,15 @@ namespace UploadFiles.On.External.Domain.Code.Base
         {
             if (string.IsNullOrEmpty(Base64))
                 return ("", FeedBack.NullOrEmpty);
-            if (Type == FilesType.Image)
-                return SaveImage(Base64, Folder);
-            if (Type == FilesType.Doc)
-                return SaveDoc(Base64, Folder);
-            if (Type == FilesType.PDF)
-                return SavePDF(Base64, Folder);
-            if (Type == FilesType.Audio)
-                return SaveAudio(Base64, Folder);
-            return ("", FeedBack.IsNotFile);
+            return Type switch
+            {
+                FilesType.Image => SaveImage(Base64, Folder),
+                FilesType.PDF => SavePDF(Base64, Folder),
+                FilesType.Doc => SaveDoc(Base64, Folder),
+                FilesType.Audio => SaveAudio(Base64, Folder),
+                FilesType.Json => SaveJson(Base64, Folder),
+                _ => ("", FeedBack.IsNotFile),
+            };
         }
         /// <summary>
         /// This function for upload files has following types(pdf, image, document)
@@ -49,15 +49,15 @@ namespace UploadFiles.On.External.Domain.Code.Base
         {
             if (string.IsNullOrEmpty(Base64))
                 return ("", FeedBack.NullOrEmpty);
-            if (Type == FilesType.Image)
-                return SaveImage2(Base64, Folder);
-            if (Type == FilesType.Doc)
-                return SaveDoc2(Base64, Folder);
-            if (Type == FilesType.PDF)
-                return SavePDF2(Base64, Folder);
-            if (Type == FilesType.Audio)
-                return SaveAudio2(Base64, Folder);
-            return ("", FeedBack.IsNotFile);
+            return Type switch
+            {
+                FilesType.Image => SaveImage2(Base64, Folder),
+                FilesType.PDF => SavePDF2(Base64, Folder),
+                FilesType.Doc => SaveDoc2(Base64, Folder),
+                FilesType.Audio => SaveAudio2(Base64, Folder),
+                FilesType.Json => SaveJson2(Base64, Folder),
+                _ => ("", FeedBack.IsNotFile),
+            };
         }
         /// <summary>
         /// This function for delete file from specific folder.
@@ -240,8 +240,8 @@ namespace UploadFiles.On.External.Domain.Code.Base
                 return ("", FeedBack.largeSize);
             AudioFormat AudioFormat = GetAudioFormat(Length);
             if (AudioFormat == AudioFormat.mp3 || AudioFormat == AudioFormat.mp4 || AudioFormat == AudioFormat.wav || AudioFormat == AudioFormat.wmv)
-                return (Save(ref Length, ref Folder, ref Settings, FileExt.wav), FeedBack.DocUploaded);
-            return ("", FeedBack.IsNotDoc);
+                return (Save(ref Length, ref Folder, ref Settings, FileExt.wav), FeedBack.AudioFileUploaded);
+            return ("", FeedBack.IsNotAudioFile);
         }
         /// <summary>
         /// This func for save Voice file
@@ -259,8 +259,48 @@ namespace UploadFiles.On.External.Domain.Code.Base
                 return ("", FeedBack.largeSize);
             AudioFormat AudioFormat = GetAudioFormat(Length);
             if (AudioFormat == AudioFormat.mp3 || AudioFormat == AudioFormat.mp4 || AudioFormat == AudioFormat.wav || AudioFormat == AudioFormat.wmv)
-                return (Save2(ref Length, ref Folder, ref Settings, FileExt.wav), FeedBack.DocUploaded);
-            return ("", FeedBack.IsNotDoc);
+                return (Save2(ref Length, ref Folder, ref Settings, FileExt.wav), FeedBack.AudioFileUploaded);
+            return ("", FeedBack.IsNotAudioFile);
+        }
+        #endregion
+        #region Helper funcation [Save Json]
+        /// <summary>
+        /// This func for save Json file
+        /// Returns from this function are the name of Json with full path
+        /// </summary>
+        /// <param name="Base64"></param>
+        /// <param name="Folder"></param>
+        /// <returns></returns>
+        private (string, FeedBack) SaveJson(string Base64, string Folder)
+        {
+            UploadFileSettings Settings = SubDomainSettings();
+            string FixBase64 = Regex.Replace(Base64, @"^data:.+;base64,", string.Empty);
+            byte[] Length = Convert.FromBase64String(FixBase64);
+            if (Length.Length > (ImageFileLength * Settings.MaximumSize))
+                return ("", FeedBack.largeSize);
+            JsonFormat JsonFormat = GetJsonFormat(Length);
+            if (JsonFormat == JsonFormat.json)
+                return (Save(ref Length, ref Folder, ref Settings, FileExt.json), FeedBack.JsonUploaded);
+            return ("", FeedBack.IsNotJson);
+        }
+        /// <summary>
+        /// This func for save Json file
+        /// Returns from this function are the name of Json only
+        /// </summary>
+        /// <param name="Base64"></param>
+        /// <param name="Folder"></param>
+        /// <returns></returns>
+        private (string, FeedBack) SaveJson2(string Base64, string Folder)
+        {
+            UploadFileSettings Settings = SubDomainSettings();
+            string FixBase64 = Regex.Replace(Base64, @"^data:.+;base64,", string.Empty);
+            byte[] Length = Convert.FromBase64String(FixBase64);
+            if (Length.Length > (ImageFileLength * Settings.MaximumSize))
+                return ("", FeedBack.largeSize);
+            JsonFormat JsonFormat = GetJsonFormat(Length);
+            if (JsonFormat == JsonFormat.json)
+                return (Save2(ref Length, ref Folder, ref Settings, FileExt.json), FeedBack.JsonUploaded);
+            return ("", FeedBack.IsNotJson);
         }
         #endregion
 
@@ -357,7 +397,6 @@ namespace UploadFiles.On.External.Domain.Code.Base
                 return DocFormat.Doc;
             return DocFormat.unknown;
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -379,6 +418,21 @@ namespace UploadFiles.On.External.Domain.Code.Base
             if (WMV.SequenceEqual(bytes.Take(WMV.Length)))
                 return AudioFormat.wmv;
             return AudioFormat.unknown;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        private static JsonFormat GetJsonFormat(byte[] bytes)
+        {
+            var Json = new byte[] { 123, 10, 32, 32, 34, 111, 112 };
+            var shortJson = new byte[] { 123, 10, 32, 32, 34 };
+            if (Json.SequenceEqual(bytes.Take(Json.Length)))
+                return JsonFormat.json;
+            if (shortJson.SequenceEqual(bytes.Take(shortJson.Length)))
+                return JsonFormat.json;
+            return JsonFormat.unknown;
         }
         #endregion
     }
